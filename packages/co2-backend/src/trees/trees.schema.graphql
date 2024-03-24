@@ -1,0 +1,22 @@
+
+type Tree {
+  id: ID!
+  species: String!
+  age: Int!
+}
+
+
+type Query {
+  tree(id: ID!): Tree
+  trees: [Tree!]!
+}
+
+input CreateTreeInput {
+  species: String!
+  age: String!
+}
+
+type Mutation {
+  createTree(input: CreateTreeInput!): Tree!
+}
+
