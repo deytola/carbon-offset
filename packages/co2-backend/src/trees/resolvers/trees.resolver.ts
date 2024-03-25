@@ -1,6 +1,6 @@
 import { Resolver } from '@nestjs/graphql';
 import { TreesService } from '../services/trees.service';
-import Tree from '../entities/trees.entities';
+import Tree from '../entities/tree.entity';
 import { Query, Args, Mutation } from '@nestjs/graphql';
 import { CreateTreeInput } from '../../graphql';
 

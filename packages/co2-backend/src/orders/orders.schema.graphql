@@ -1,0 +1,25 @@
+type Order {
+    id: ID!
+    userId: Int!
+    treeId: Int!
+    quantity: Int!
+    totalPrice: Float!
+}
+
+
+type Query {
+    order(id: ID!): Order
+    orders: [Order!]!
+}
+
+input CreateOrderInput {
+    userId: Int!
+    treeId: Int!
+    quantity: Int!
+    totalPrice: Float!
+}
+
+type Mutation {
+    createOrder(orderInput: CreateOrderInput!): Order!
+}
+

@@ -6,11 +6,15 @@ export class Tree extends Model {
   @AutoIncrement
   @Column
   id: number;
+
   @Column
   species: string;
 
   @Column
   age: number;
+
+  @Column
+  unitPrice: number;
 }
 
 export default Tree;

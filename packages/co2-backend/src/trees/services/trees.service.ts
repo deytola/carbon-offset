@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import Tree from '../entities/trees.entities';
+import Tree from '../entities/tree.entity';
 import { CreateTreeInput } from '../../graphql';
 @Injectable()
 export class TreesService {

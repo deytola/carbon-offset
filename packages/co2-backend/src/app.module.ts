@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import * as dotenv from 'dotenv';
 import { Dialect } from 'sequelize/types';
+import { OrdersModule } from './orders/orders.module';
 dotenv.config();
 
 const sequelizeOptions: SequelizeModuleOptions = {
@@ -18,7 +19,7 @@ const sequelizeOptions: SequelizeModuleOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  models: [join(__dirname, './', '**', '*.entities.{ts,js}')],
+  models: [join(__dirname, './', '**', '*.entity.{ts,js}')],
   autoLoadModels: true,
   synchronize: true, //false in prod
 };
@@ -38,6 +39,7 @@ const sequelizeOptions: SequelizeModuleOptions = {
     VehiclesModule,
     TreesModule,
     UsersModule,
+    OrdersModule,
   ],
   controllers: [],
   providers: [AppService],
