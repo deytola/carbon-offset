@@ -13,10 +13,10 @@ type Query {
 
 input CreateTreeInput {
   species: String!
-  age: String!
+  age: Int!
 }
 
 type Mutation {
-  createTree(input: CreateTreeInput!): Tree!
+  createTree(treeInput: CreateTreeInput!): Tree!
 }
 

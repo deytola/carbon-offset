@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -19,7 +18,7 @@ const sequelizeOptions: SequelizeModuleOptions = {
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  models: [join(__dirname, './', '**', '*.model.{ts,js}')],
+  models: [join(__dirname, './', '**', '*.entities.{ts,js}')],
   autoLoadModels: true,
   synchronize: true, //false in prod
 };
@@ -40,7 +39,7 @@ const sequelizeOptions: SequelizeModuleOptions = {
     TreesModule,
     UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [],
   providers: [AppService],
 })
 export class AppModule {}

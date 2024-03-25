@@ -10,7 +10,7 @@
 
 export interface CreateTreeInput {
     species: string;
-    age: string;
+    age: number;
 }
 
 export interface Tree {
@@ -25,7 +25,7 @@ export interface IQuery {
 }
 
 export interface IMutation {
-    createTree(input: CreateTreeInput): Tree | Promise<Tree>;
+    createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
 }
 
 type Nullable<T> = T | null;
