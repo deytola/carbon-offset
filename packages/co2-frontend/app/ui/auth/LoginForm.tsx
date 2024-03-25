@@ -2,13 +2,16 @@ import React, {useState} from 'react';
 import {Button, Grid, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import AuthViewer from "@/app/ui/auth-viewer";
+import AuthUpdater from "@/app/ui/auth-updater";
 
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         console.log('Username:', username);
         console.log('Password:', password);
@@ -45,9 +48,18 @@ const LoginForm = () => {
                         <TextField
                             label="Username"
                             variant="outlined"
-                            name="year"
+                            name="username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            margin="normal"
+                            sx={{width: 0.5}}
+                        />
+                        <TextField
+                            label="Email"
+                            variant="outlined"
+                            name="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             margin="normal"
                             sx={{width: 0.5}}
                         />
@@ -69,6 +81,8 @@ const LoginForm = () => {
                         >
                             SIGN UP
                         </Button>
+                        <AuthViewer/>
+                        <AuthUpdater/>
                     </Box>
                 </Grid>
             </Grid>
