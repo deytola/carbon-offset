@@ -20,6 +20,11 @@ export class OrdersService {
 
   async createOrder(orderInput: CreateOrderInput) {
     const { userId, treeId, quantity, totalPrice } = orderInput;
-    return this.orderRepository.create({ userId, treeId, quantity, totalPrice });
+    return this.orderRepository.create({
+      userId,
+      treeId,
+      quantity,
+      totalPrice,
+    });
   }
 }

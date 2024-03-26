@@ -1,27 +1,42 @@
-import { Column, Model, Table, PrimaryKey, AutoIncrement, ForeignKey } from 'sequelize-typescript';
+import {
+  Column,
+  Model,
+  Table,
+  PrimaryKey,
+  AutoIncrement,
+  ForeignKey,
+  BelongsTo,
+  DataType,
+} from 'sequelize-typescript';
 import User from '../../users/entities/user.entity';
 import Tree from '../../trees/entities/tree.entity';
 
 @Table
 export class Order extends Model {
-    @PrimaryKey
-    @AutoIncrement
-    @Column
-    id: number;
+  @PrimaryKey
+  @AutoIncrement
+  @Column({ type: DataType.INTEGER })
+  readonly id: number;
 
-    @ForeignKey(() => User)
-    @Column
-    userId: number;
+  @ForeignKey(() => User)
+  @Column({ type: DataType.INTEGER, field: 'fk_user_id' })
+  readonly fkUserId: number;
 
-    @ForeignKey(() => Tree)
-    @Column
-    treeId: number;
+  @BelongsTo(() => User)
+  readonly user: User;
 
-    @Column
-    quantity: number;
+  @ForeignKey(() => Tree)
+  @Column({ type: DataType.INTEGER, field: 'fk_tree_id' })
+  readonly fkTreeId: number;
 
-    @Column
-    totalPrice: number;
+  @BelongsTo(() => Tree)
+  readonly tree: Tree;
+
+  @Column({ type: DataType.INTEGER })
+  readonly quantity: number;
+
+  @Column({ type: DataType.INTEGER })
+  readonly totalPrice: number;
 }
 
 export default Order;

@@ -9,11 +9,11 @@ export class TreesResolver {
   constructor(private readonly treesService: TreesService) {}
 
   @Query(() => [Tree])
-  async trees() {
+  async trees(): Promise<Tree[]> {
     return this.treesService.getAllTrees();
   }
   @Query(() => Tree)
-  async tree(id: number) {
+  async tree(id: number): Promise<Tree> {
     return this.treesService.getTree(id);
   }
 

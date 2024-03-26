@@ -1,0 +1,29 @@
+type Vehicle {
+  id: ID!
+  year: Int!
+  make: String!
+  model: String!
+  mileage: Int!
+  imageURL: String!
+  mttRatio: Int!
+}
+
+
+type Query {
+  vehicle(id: ID!): Vehicle
+  vehicles: [Vehicle!]!
+}
+
+input CreateVehicleInput {
+  year: Int!
+  make: String!
+  model: String!
+  mileage: Int
+  imageURL: String
+  mttRatio: Int
+}
+
+type Mutation {
+  createVehicle(vehicleInput: CreateVehicleInput!): Tree!
+}
+
