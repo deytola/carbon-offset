@@ -19,14 +19,14 @@ export class Order extends Model {
   readonly id: number;
 
   @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, field: 'fk_user_id' })
+  @Column({ field: 'fk_user_id' })
   readonly fkUserId: number;
 
   @BelongsTo(() => User)
   readonly user: User;
 
   @ForeignKey(() => Tree)
-  @Column({ type: DataType.INTEGER, field: 'fk_tree_id' })
+  @Column({ field: 'fk_tree_id' })
   readonly fkTreeId: number;
 
   @BelongsTo(() => Tree)

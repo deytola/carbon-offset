@@ -1,7 +1,7 @@
 type Order {
     id: ID!
-    userId: Int!
-    treeId: Int!
+    fkUserId: ID!
+    fkTreeId: ID!
     quantity: Int!
     totalPrice: Float!
 }
@@ -13,8 +13,8 @@ type Query {
 }
 
 input CreateOrderInput {
-    userId: Int!
-    treeId: Int!
+    fkUserId: Int!
+    fkTreeId: Int!
     quantity: Int!
     totalPrice: Float!
 }

@@ -13,7 +13,7 @@ export class TreesResolver {
     return this.treesService.getAllTrees();
   }
   @Query(() => Tree)
-  async tree(id: number): Promise<Tree> {
+  async tree(@Args('id') id: number): Promise<Tree> {
     return this.treesService.getTree(id);
   }
 

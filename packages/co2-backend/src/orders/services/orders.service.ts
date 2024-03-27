@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { CreateOrderInput } from '../../graphql';
 import Order from '../entities/order.entity';
+import { CreateOrderInput } from '../../graphql';
 
 @Injectable()
 export class OrdersService {
@@ -19,10 +19,10 @@ export class OrdersService {
   }
 
   async createOrder(orderInput: CreateOrderInput) {
-    const { userId, treeId, quantity, totalPrice } = orderInput;
+    const { fkUserId, fkTreeId, quantity, totalPrice } = orderInput;
     return this.orderRepository.create({
-      userId,
-      treeId,
+      fkUserId,
+      fkTreeId,
       quantity,
       totalPrice,
     });

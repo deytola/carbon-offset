@@ -8,9 +8,21 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export interface CreateMakeInput {
+    name: string;
+    originCountry: string;
+}
+
+export interface CreateModelInput {
+    modelName: string;
+    year: number;
+    mttRatio: number;
+    fkMakeId: number;
+}
+
 export interface CreateOrderInput {
-    userId: number;
-    treeId: number;
+    fkUserId: number;
+    fkTreeId: number;
     quantity: number;
     totalPrice: number;
 }
@@ -36,15 +48,23 @@ export interface CreateVehicleInput {
     mttRatio?: Nullable<number>;
 }
 
-export interface Order {
+export interface UserLogin {
+    email: string;
+    password: string;
+}
+
+export interface Make {
     id: string;
-    userId: number;
-    treeId: number;
-    quantity: number;
-    totalPrice: number;
+    name: string;
+    originCountry: string;
+    vehicles: Vehicle[];
 }
 
 export interface IQuery {
+    make(id: string): Nullable<Make> | Promise<Nullable<Make>>;
+    makes(): Make[] | Promise<Make[]>;
+    model(id: string): Nullable<Make> | Promise<Nullable<Make>>;
+    models(): Make[] | Promise<Make[]>;
     order(id: string): Nullable<Order> | Promise<Nullable<Order>>;
     orders(): Order[] | Promise<Order[]>;
     tree(id: string): Nullable<Tree> | Promise<Nullable<Tree>>;
@@ -56,10 +76,28 @@ export interface IQuery {
 }
 
 export interface IMutation {
+    createMake(makeInput: CreateMakeInput): Make | Promise<Make>;
+    createModel(modelInput: CreateModelInput): Model | Promise<Model>;
     createOrder(orderInput: CreateOrderInput): Order | Promise<Order>;
     createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
-    createUser(userInput: CreateUserInput): User | Promise<User>;
+    createUser(userInput: CreateUserInput): SignedUser | Promise<SignedUser>;
     createVehicle(vehicleInput: CreateVehicleInput): Tree | Promise<Tree>;
+}
+
+export interface Model {
+    id: string;
+    modelName: string;
+    year: number;
+    mttRatio: number;
+    fkMakeId: number;
+}
+
+export interface Order {
+    id: string;
+    fkUserId: string;
+    fkTreeId: string;
+    quantity: number;
+    totalPrice: number;
 }
 
 export interface Tree {
@@ -74,7 +112,13 @@ export interface User {
     lastName: string;
     email: string;
     password: string;
+    userRole: string;
     orders?: Nullable<Nullable<Order>[]>;
+}
+
+export interface SignedUser {
+    token: string;
+    user: User;
 }
 
 export interface Vehicle {

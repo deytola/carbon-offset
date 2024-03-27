@@ -13,7 +13,7 @@ export class OrdersResolver {
   }
 
   @Query(() => Order)
-  async order(id: number): Promise<Order> {
+  async order(@Args('id') id: number): Promise<Order> {
     return this.orderService.getOrder(id);
   }
 

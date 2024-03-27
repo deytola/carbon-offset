@@ -10,6 +10,9 @@ import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import * as dotenv from 'dotenv';
 import { Dialect } from 'sequelize/types';
 import { OrdersModule } from './orders/orders.module';
+import { AuthModule } from './auth/auth.module';
+import { MakesModule } from './makes/makes.module';
+import { ModelsModule } from './models/models.module';
 dotenv.config();
 
 const sequelizeOptions: SequelizeModuleOptions = {
@@ -32,6 +35,7 @@ const sequelizeOptions: SequelizeModuleOptions = {
       definitions: {
         path: join(process.cwd(), 'src/graphql.ts'),
       },
+      context: ({ req, res }) => ({ req, res }),
     }),
     SequelizeModule.forRoot({
       ...sequelizeOptions,
@@ -40,6 +44,9 @@ const sequelizeOptions: SequelizeModuleOptions = {
     TreesModule,
     UsersModule,
     OrdersModule,
+    AuthModule,
+    MakesModule,
+    ModelsModule,
   ],
   controllers: [],
   providers: [AppService],

@@ -1,0 +1,22 @@
+type Make {
+    id: ID!
+    name: String!
+    originCountry: String!
+    vehicles: [Vehicle!]!
+}
+
+
+type Query {
+    make(id: ID!): Make
+    makes: [Make!]!
+}
+
+input CreateMakeInput {
+    name: String!
+    originCountry: String!
+}
+
+type Mutation {
+    createMake(makeInput: CreateMakeInput!): Make!
+}
+

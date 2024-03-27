@@ -3,36 +3,30 @@ import {
   Model,
   Table,
   PrimaryKey,
-  DataType,
   AutoIncrement,
-  ForeignKey,
   BelongsTo,
+  DataType,
+  ForeignKey,
 } from 'sequelize-typescript';
-import User from '../../users/entities/user.entity';
 import Make from '../../makes/entities/make.entity';
 
-@Table
-export class Vehicle extends Model {
+@Table({
+  tableName: 'Models',
+})
+export class ModelEntity extends Model {
   @PrimaryKey
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
   readonly id: number;
 
+  @Column({ type: DataType.STRING, unique: true })
+  readonly modelName: string;
+
   @Column({ type: DataType.INTEGER })
   readonly year: number;
 
   @Column({ type: DataType.INTEGER })
-  readonly mileage: number;
-
-  @Column({ type: DataType.INTEGER })
   readonly mttRatio: number;
-
-  @ForeignKey(() => User)
-  @Column({ type: DataType.INTEGER, field: 'fk_user_id' })
-  readonly fkUserId: number;
-
-  @BelongsTo(() => User)
-  readonly user: User;
 
   @ForeignKey(() => Make)
   @Column({ type: DataType.INTEGER, field: 'fk_make_id' })
@@ -42,4 +36,4 @@ export class Vehicle extends Model {
   readonly make: Make;
 }
 
-export default Vehicle;
+export default ModelEntity;

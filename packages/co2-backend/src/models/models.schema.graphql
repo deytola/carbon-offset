@@ -1,0 +1,25 @@
+type Model {
+    id: ID!
+    modelName: String!
+    year: Int!
+    mttRatio: Int!
+    fkMakeId: Int!
+}
+
+
+type Query {
+    model(id: ID!): Make
+    models: [Make!]!
+}
+
+input CreateModelInput {
+    modelName: String!
+    year: Int!
+    mttRatio: Int!
+    fkMakeId: Int!
+}
+
+type Mutation {
+    createModel(modelInput: CreateModelInput!): Model!
+}
+
