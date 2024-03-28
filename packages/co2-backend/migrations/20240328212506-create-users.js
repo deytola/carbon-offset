@@ -8,38 +8,38 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       firstName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       lastName: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       userRole: {
         type: Sequelize.ENUM('regular', 'admin'), // Values from UserRoles constant
         allowNull: false,
-        defaultValue: 'regular'
+        defaultValue: 'regular',
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     // Create foreign key for orders association
@@ -48,10 +48,10 @@ module.exports = {
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
     });
 
     // Create foreign key for vehicles association
@@ -60,10 +60,10 @@ module.exports = {
       allowNull: false,
       references: {
         model: 'Users',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
     });
   },
   down: async (queryInterface, Sequelize) => {
@@ -74,5 +74,5 @@ module.exports = {
     await queryInterface.removeColumn('Vehicles', 'userId');
 
     await queryInterface.dropTable('Users');
-  }
+  },
 };

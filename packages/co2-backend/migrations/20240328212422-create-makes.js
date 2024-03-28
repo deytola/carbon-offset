@@ -8,25 +8,25 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-        unique: true
+        unique: true,
       },
       originCountry: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
 
     await queryInterface.addIndex('Makes', ['name']);
@@ -35,20 +35,20 @@ module.exports = {
       type: Sequelize.INTEGER,
       references: {
         model: 'Makes',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
     });
 
     await queryInterface.addColumn('Models', 'fk_make_id', {
       type: Sequelize.INTEGER,
       references: {
         model: 'Makes',
-        key: 'id'
+        key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
     });
   },
   down: async (queryInterface, Sequelize) => {
@@ -57,5 +57,5 @@ module.exports = {
     await queryInterface.removeColumn('Models', 'makeId');
 
     await queryInterface.dropTable('Makes');
-  }
+  },
 };
