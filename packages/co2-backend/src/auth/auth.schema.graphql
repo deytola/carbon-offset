@@ -2,3 +2,18 @@ type UserLogin {
     email: String!
     password: String!
 }
+
+type SuccessResponse {
+    token: String!
+    user: User!
+}
+
+
+input SignInInput {
+    email: String!
+    password: String!
+}
+
+type Mutation {
+    signIn(signInInput: SignInInput!): SuccessResponse!
+}

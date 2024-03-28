@@ -24,9 +24,6 @@ export class Vehicle extends Model {
   @Column({ type: DataType.INTEGER })
   readonly mileage: number;
 
-  @Column({ type: DataType.INTEGER })
-  readonly mttRatio: number;
-
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER, field: 'fk_user_id' })
   readonly fkUserId: number;

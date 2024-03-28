@@ -4,7 +4,8 @@ import {
   Table,
   PrimaryKey,
   AutoIncrement,
-  HasMany, DataType,
+  HasMany,
+  DataType,
 } from 'sequelize-typescript';
 import Order from '../../orders/entities/order.entity';
 

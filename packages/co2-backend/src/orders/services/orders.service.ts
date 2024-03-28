@@ -19,10 +19,12 @@ export class OrdersService {
   }
 
   async createOrder(orderInput: CreateOrderInput) {
-    const { fkUserId, fkTreeId, quantity, totalPrice } = orderInput;
+    const { fkUserId, fkTreeId, fkVehicleId, quantity, totalPrice } =
+      orderInput;
     return this.orderRepository.create({
       fkUserId,
       fkTreeId,
+      fkVehicleId,
       quantity,
       totalPrice,
     });

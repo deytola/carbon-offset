@@ -1,9 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../../users/services/users.service';
-import { UserLogin } from '../../graphql';
+import { SignInInput } from '../../graphql';
+import { SignInResponse } from '../auth-types';
 
 @Injectable()
 export class AuthService {
@@ -11,26 +11,25 @@ export class AuthService {
     private userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
-
-  async login(userLogin: UserLogin): Promise<{ token: string; user: User }> {
+  async signIn(signInInput: SignInInput): Promise<SignInResponse> {
     const savedUser = await this.userService.getUserByOptions({
       where: {
-        email: userLogin.email,
+        email: signInInput.email,
       },
     });
     if (!savedUser) {
-      throw new BadRequestException('Invalid credentials');
+      throw new BadRequestException('Invalid login credentials');
     }
-    if (!(await bcrypt.compare(userLogin.password, savedUser.password))) {
-      throw new BadRequestException('Invalid credentials');
+    if (!(await bcrypt.compare(signInInput.password, savedUser.password))) {
+      throw new BadRequestException('Invalid login credentials');
     }
-    await savedUser.save();
-    delete savedUser.password;
+    const userWithoutPassword = { ...savedUser.get(), password: undefined };
     return {
       token: this.jwtService.sign({
-        ...savedUser,
+        userWithoutPassword,
+        subject: userWithoutPassword.id,
       }),
-      user: savedUser,
+      user: userWithoutPassword,
     };
   }
 }

@@ -8,6 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export interface SignInInput {
+    email: string;
+    password: string;
+}
+
 export interface CreateMakeInput {
     name: string;
     originCountry: string;
@@ -23,6 +28,7 @@ export interface CreateModelInput {
 export interface CreateOrderInput {
     fkUserId: number;
     fkTreeId: number;
+    fkVehicleId: number;
     quantity: number;
     totalPrice: number;
 }
@@ -53,6 +59,21 @@ export interface UserLogin {
     password: string;
 }
 
+export interface SuccessResponse {
+    token: string;
+    user: User;
+}
+
+export interface IMutation {
+    signIn(signInInput: SignInInput): SuccessResponse | Promise<SuccessResponse>;
+    createMake(makeInput: CreateMakeInput): Make | Promise<Make>;
+    createModel(modelInput: CreateModelInput): Model | Promise<Model>;
+    createOrder(orderInput: CreateOrderInput): Order | Promise<Order>;
+    createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
+    createUser(userInput: CreateUserInput): User | Promise<User>;
+    createVehicle(vehicleInput: CreateVehicleInput): Tree | Promise<Tree>;
+}
+
 export interface Make {
     id: string;
     name: string;
@@ -75,15 +96,6 @@ export interface IQuery {
     vehicles(): Vehicle[] | Promise<Vehicle[]>;
 }
 
-export interface IMutation {
-    createMake(makeInput: CreateMakeInput): Make | Promise<Make>;
-    createModel(modelInput: CreateModelInput): Model | Promise<Model>;
-    createOrder(orderInput: CreateOrderInput): Order | Promise<Order>;
-    createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
-    createUser(userInput: CreateUserInput): SignedUser | Promise<SignedUser>;
-    createVehicle(vehicleInput: CreateVehicleInput): Tree | Promise<Tree>;
-}
-
 export interface Model {
     id: string;
     modelName: string;
@@ -96,6 +108,7 @@ export interface Order {
     id: string;
     fkUserId: string;
     fkTreeId: string;
+    fkVehicleId: string;
     quantity: number;
     totalPrice: number;
 }
@@ -114,11 +127,6 @@ export interface User {
     password: string;
     userRole: string;
     orders?: Nullable<Nullable<Order>[]>;
-}
-
-export interface SignedUser {
-    token: string;
-    user: User;
 }
 
 export interface Vehicle {

@@ -2,6 +2,7 @@ type Order {
     id: ID!
     fkUserId: ID!
     fkTreeId: ID!
+    fkVehicleId: ID!
     quantity: Int!
     totalPrice: Float!
 }
@@ -15,6 +16,7 @@ type Query {
 input CreateOrderInput {
     fkUserId: Int!
     fkTreeId: Int!
+    fkVehicleId: Int!
     quantity: Int!
     totalPrice: Float!
 }

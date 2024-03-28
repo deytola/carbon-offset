@@ -10,6 +10,7 @@ import {
 } from 'sequelize-typescript';
 import User from '../../users/entities/user.entity';
 import Tree from '../../trees/entities/tree.entity';
+import Vehicle from '../../vehicles/entities/vehicle.entity';
 
 @Table
 export class Order extends Model {
@@ -31,6 +32,13 @@ export class Order extends Model {
 
   @BelongsTo(() => Tree)
   readonly tree: Tree;
+
+  @ForeignKey(() => Vehicle)
+  @Column({ field: 'fk_vehicle_id' })
+  readonly fkVehicleId: number;
+
+  @BelongsTo(() => Vehicle)
+  readonly vehicle: Vehicle;
 
   @Column({ type: DataType.INTEGER })
   readonly quantity: number;

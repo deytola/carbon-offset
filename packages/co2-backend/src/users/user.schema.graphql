@@ -7,10 +7,6 @@ type User {
     userRole: String!
     orders: [Order]
 }
-type SignedUser {
-    token: String!
-    user: User!
-}
 
 type Query {
     user(id: ID!): User
@@ -25,6 +21,6 @@ input CreateUserInput {
 }
 
 type Mutation {
-    createUser(userInput: CreateUserInput!): SignedUser!
+    createUser(userInput: CreateUserInput!): User!
 }
 

@@ -22,16 +22,16 @@ export class User extends Model {
   readonly firstName: string;
 
   @Column({ type: DataType.STRING })
-  lastName: string;
+  readonly lastName: string;
 
   @Column({ type: DataType.STRING, unique: true })
-  email: string;
+  readonly email: string;
 
   @Column({ type: DataType.STRING })
-  password: string;
+  readonly password: string;
 
   @HasMany(() => Order)
-  orders: Order[];
+  readonly orders: Order[];
 
   @HasMany(() => Vehicle)
   readonly vehicles: Vehicle[];
