@@ -23,8 +23,8 @@ const sequelizeOptions: SequelizeModuleOptions = {
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
   models: [join(__dirname, './', '**', '*.entity.{ts,js}')],
-  autoLoadModels: true,
-  synchronize: true, //false in prod
+  // autoLoadModels: true,
+  // synchronize: true, //false in prod
 };
 @Module({
   imports: [
