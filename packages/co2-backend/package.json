@@ -10,7 +10,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
-    "migrate:dev": "npx dotenv -e .env.development -- npx sequelize-cli db:migrate --debug",
+    "migrate:dev": "npx sequelize-cli db:migrate --debug",
     "migrate:gen": "npx sequelize-cli migration:generate --name",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",

@@ -28,7 +28,7 @@ module.exports = {
         allowNull: false,
       },
       userRole: {
-        type: Sequelize.ENUM('regular', 'admin'), // Values from UserRoles constant
+        type: Sequelize.ENUM('regular', 'admin'),
         allowNull: false,
         defaultValue: 'regular',
       },
@@ -43,7 +43,7 @@ module.exports = {
     });
 
     // Create foreign key for orders association
-    await queryInterface.addColumn('Orders', 'userId', {
+    await queryInterface.addColumn('Orders', 'fk_user_id', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -55,7 +55,7 @@ module.exports = {
     });
 
     // Create foreign key for vehicles association
-    await queryInterface.addColumn('Vehicles', 'userId', {
+    await queryInterface.addColumn('Vehicles', 'fk_user_id', {
       type: Sequelize.INTEGER,
       allowNull: false,
       references: {
@@ -68,10 +68,10 @@ module.exports = {
   },
   down: async (queryInterface, Sequelize) => {
     // Remove foreign key for orders association
-    await queryInterface.removeColumn('Orders', 'userId');
+    await queryInterface.removeColumn('Orders', 'fk_user_id');
 
     // Remove foreign key for vehicles association
-    await queryInterface.removeColumn('Vehicles', 'userId');
+    await queryInterface.removeColumn('Vehicles', 'fk_user_id');
 
     await queryInterface.dropTable('Users');
   },

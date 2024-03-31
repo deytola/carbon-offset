@@ -29,10 +29,9 @@ module.exports = {
       },
     });
 
-    await queryInterface.addIndex('Makes', ['name']);
-
     await queryInterface.addColumn('Vehicles', 'fk_make_id', {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: 'Makes',
         key: 'id',
@@ -52,9 +51,9 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.removeColumn('Vehicles', 'makeId');
+    await queryInterface.removeColumn('Vehicles', 'fk_make_id');
 
-    await queryInterface.removeColumn('Models', 'makeId');
+    await queryInterface.removeColumn('Models', 'fk_make_id');
 
     await queryInterface.dropTable('Makes');
   },

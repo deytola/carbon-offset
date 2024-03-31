@@ -31,9 +31,24 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
+
+    // Create foreign key for orders association
+    await queryInterface.addColumn('Orders', 'fk_tree_id', {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Trees',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
+    });
+
   },
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn('Orders', 'fk_tree_id');
+
     await queryInterface.dropTable('Trees');
   },
 };
