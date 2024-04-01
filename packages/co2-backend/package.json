@@ -12,6 +12,8 @@
     "start:dev": "nest start --watch",
     "migrate:dev": "npx sequelize-cli db:migrate --debug",
     "migrate:gen": "npx sequelize-cli migration:generate --name",
+    "seed:dev": "npx sequelize-cli db:seed:all --debug",
+    "seed:undo": "npx sequelize-cli db:seed:undo:all --debug",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

@@ -25,7 +25,7 @@ export class ModelEntity extends Model {
   @Column({ type: DataType.INTEGER })
   readonly year: number;
 
-  @Column({ type: DataType.INTEGER })
+  @Column({ type: DataType.FLOAT })
   readonly mttRatio: number;
 
   @ForeignKey(() => Make)

@@ -4,7 +4,7 @@
 
 
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="ERD.png" width="100%" alt="E_R Diagram" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="ERD.png.old" width="100%" alt="E_R Diagram" /></a>
 </p>
 
 

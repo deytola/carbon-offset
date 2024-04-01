@@ -21,14 +21,29 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: new Date()
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: new Date()
       },
+    });
+
+    await queryInterface.addColumn('Orders', 'fk_vehicle_id', {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Vehicles',
+        key: 'id',
+      },
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     });
   },
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn('Orders', 'fk_vehicle_id');
+
     await queryInterface.dropTable('Vehicles');
   },
 };
