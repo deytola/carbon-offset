@@ -3,14 +3,17 @@ type Order {
     fkUserId: ID!
     fkTreeId: ID!
     fkVehicleId: ID!
+    vehicle: Vehicle
     quantity: Int!
     totalPrice: Float!
+    totalTrees: Int
 }
 
 
 type Query {
     order(id: ID!): Order
     orders: [Order!]!
+    leaderboard: [Order!]!
 }
 
 input CreateOrderInput {
@@ -18,7 +21,6 @@ input CreateOrderInput {
     fkTreeId: Int!
     fkVehicleId: Int!
     quantity: Int!
-    totalPrice: Float!
 }
 
 type Mutation {

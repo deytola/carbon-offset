@@ -1,13 +1,16 @@
 import type { CodegenConfig } from '@graphql-codegen/cli'
 
 const config: CodegenConfig = {
-    schema: 'https://localhost:4000/graphql',
-    documents: ['src/**/*.tsx'],
+    schema: 'http://localhost:4000/graphql',
+    documents: ['app/**/*.tsx'],
     generates: {
-        './src/gql/': {
+        './src/__generated__/': {
             preset: 'client',
+            presetConfig: {
+                gqlTagName: "gql",
+            },
         }
     },
-
+    ignoreNoDocuments: true,
 }
 export default config

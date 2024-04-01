@@ -3,6 +3,10 @@ import { OrdersService } from '../services/orders.service';
 import Order from '../entities/order.entity';
 import { CreateOrderInput } from '../../graphql';
 import sequelize from 'sequelize';
+import {BadRequestException} from '@nestjs/common';
+import Vehicle from '../../vehicles/entities/vehicle.entity';
+import Make from '../../makes/entities/make.entity';
+import ModelEntity from '../../models/entities/model.entity';
 
 @Resolver()
 export class OrdersResolver {
@@ -15,6 +19,16 @@ export class OrdersResolver {
     });
   }
 
+  @Query(() => [Order])
+  async leaderboard(): Promise<Order[]> {
+    return this.orderService.getOrdersLeaderboard({
+      include: [
+        {model: Vehicle, include: [{model: Make}, {model: ModelEntity}]}
+      ],
+      order: [['totalPrice', 'DESC']],
+    });
+  }
+
   @Query(() => Order)
   async order(@Args('id') id: number): Promise<Order> {
     return this.orderService.getOrder(id);
@@ -23,7 +37,7 @@ export class OrdersResolver {
   @Mutation(() => Order)
   async createOrder(
     @Args('orderInput') orderInput: CreateOrderInput,
-  ): Promise<Order> {
+  ): Promise<Order|BadRequestException> {
     return this.orderService.createOrder(orderInput);
   }
 }

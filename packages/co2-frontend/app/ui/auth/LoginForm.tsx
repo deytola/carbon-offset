@@ -42,7 +42,7 @@ const LoginForm = () => {
                 <Grid item xs={8}>
                     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" sx={{ height: '100vh'}}>
                         <Typography variant="h5" component="h1">
-                            Login
+                            Sign Up
                         </Typography>
                         <TextField
                             label="Username"

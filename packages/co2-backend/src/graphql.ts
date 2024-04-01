@@ -30,11 +30,11 @@ export interface CreateOrderInput {
     fkTreeId: number;
     fkVehicleId: number;
     quantity: number;
-    totalPrice: number;
 }
 
 export interface CreateTreeInput {
     species: string;
+    unitPrice: number;
     age: number;
 }
 
@@ -46,12 +46,11 @@ export interface CreateUserInput {
 }
 
 export interface CreateVehicleInput {
-    year: number;
-    make: string;
-    model: string;
-    mileage?: Nullable<number>;
+    fkMakeId: number;
+    fkModelId: number;
+    fkUserId: number;
+    mileage: number;
     imageURL?: Nullable<string>;
-    mttRatio?: Nullable<number>;
 }
 
 export interface UserLogin {
@@ -71,7 +70,7 @@ export interface IMutation {
     createOrder(orderInput: CreateOrderInput): Order | Promise<Order>;
     createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
     createUser(userInput: CreateUserInput): User | Promise<User>;
-    createVehicle(vehicleInput: CreateVehicleInput): Tree | Promise<Tree>;
+    createVehicle(vehicleInput: CreateVehicleInput): Vehicle | Promise<Vehicle>;
 }
 
 export interface Make {
@@ -88,6 +87,7 @@ export interface IQuery {
     models(): Make[] | Promise<Make[]>;
     order(id: string): Nullable<Order> | Promise<Nullable<Order>>;
     orders(): Order[] | Promise<Order[]>;
+    leaderboard(): Order[] | Promise<Order[]>;
     tree(id: string): Nullable<Tree> | Promise<Nullable<Tree>>;
     trees(): Tree[] | Promise<Tree[]>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
@@ -109,13 +109,16 @@ export interface Order {
     fkUserId: string;
     fkTreeId: string;
     fkVehicleId: string;
+    vehicle?: Nullable<Vehicle>;
     quantity: number;
     totalPrice: number;
+    totalTrees?: Nullable<number>;
 }
 
 export interface Tree {
     id: string;
     species: string;
+    unitPrice: number;
     age: number;
 }
 
@@ -131,12 +134,13 @@ export interface User {
 
 export interface Vehicle {
     id: string;
-    year: number;
-    make: string;
-    model: string;
+    fkMakeId: number;
+    fkModelId: number;
+    fkUserId: number;
     mileage: number;
-    imageURL: string;
-    mttRatio: number;
+    make?: Nullable<Make>;
+    model?: Nullable<Model>;
+    imageURL?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;

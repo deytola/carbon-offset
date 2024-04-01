@@ -18,7 +18,7 @@ export class TreesService {
   }
 
   async createTree(treeInput: CreateTreeInput) {
-    const { species, age } = treeInput;
-    return this.treeRepository.create({ species, age });
+    const { species, age, unitPrice } = treeInput;
+    return this.treeRepository.create({ species, age, unitPrice });
   }
 }

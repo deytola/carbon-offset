@@ -15,8 +15,42 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import {useRouter} from "next/navigation";
 import ImageUpload from "@/app/ui/image-upload";
+import { useQuery, gql } from "@apollo/client";
+import {Order} from "@/src/__generated__/graphql";
+import QueryResult from '@/app/ui/query-result';
 
 
+
+/** ORDERS gql query to retrieve all orders ranking */
+const LEADERBOARD = gql`
+    query GetLeaderboard {
+        leaderboard{
+            id
+            vehicle{
+                mileage
+                make{
+                    name
+                }
+                model{
+                    modelName
+                }
+            }
+            quantity
+            totalPrice
+        }
+    }
+`;
+
+/** MAKES gql query to retrieve all vehicle makes */
+const MAKES = gql`
+    query GetMakes {
+        makes{
+            id
+            name
+            originCountry
+        }
+    }
+`;
 function Page() {
     const [open, setOpen] = useState(false);
     const handleClickOpen = () => {
@@ -26,6 +60,8 @@ function Page() {
     const handleClose = () => {
         setOpen(false);
     };
+
+    const { loading, error, data } = useQuery(LEADERBOARD);
 
     const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet'];
     const carModels = {
@@ -89,7 +125,17 @@ function Page() {
                             🏆
                         </Typography>
                     </Box>
-                    <VehicleCard image={'/gogreen.png'} noOfTrees={100} make="Toyota" model="Tacoma"/>
+                    <QueryResult error={error} loading={loading} data={data}>
+                        {data?.leaderboard?.map((order: Order, index: number) => (
+                            <VehicleCard key={order.id}
+                                         isFirst={index===0}
+                                         image={'/gogreen.png'}
+                                         noOfTrees={order.quantity}
+                                         make={order.vehicle?.make?.name}
+                                         model={order.vehicle?.model?.modelName}
+                            />
+                        ))}
+                    </QueryResult>
                 </Stack>
                 <NewVehicleBtn handleClick={handleClickOpen}/>
             </Box>

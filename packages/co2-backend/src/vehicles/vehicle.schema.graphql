@@ -1,11 +1,12 @@
 type Vehicle {
   id: ID!
-  year: Int!
-  make: String!
-  model: String!
+  fkMakeId: Int!
+  fkModelId: Int!
+  fkUserId: Int!
   mileage: Int!
-  imageURL: String!
-  mttRatio: Int!
+  make: Make
+  model: Model
+  imageURL: String
 }
 
 
@@ -15,15 +16,14 @@ type Query {
 }
 
 input CreateVehicleInput {
-  year: Int!
-  make: String!
-  model: String!
-  mileage: Int
+  fkMakeId: Int!
+  fkModelId: Int!
+  fkUserId: Int!
+  mileage: Int!
   imageURL: String
-  mttRatio: Int
 }
 
 type Mutation {
-  createVehicle(vehicleInput: CreateVehicleInput!): Tree!
+  createVehicle(vehicleInput: CreateVehicleInput!): Vehicle!
 }
 

@@ -10,6 +10,7 @@ import {
 } from 'sequelize-typescript';
 import User from '../../users/entities/user.entity';
 import Make from '../../makes/entities/make.entity';
+import ModelEntity from '../../models/entities/model.entity';
 
 @Table
 export class Vehicle extends Model {
@@ -17,9 +18,6 @@ export class Vehicle extends Model {
   @AutoIncrement
   @Column({ type: DataType.INTEGER })
   readonly id: number;
-
-  @Column({ type: DataType.INTEGER })
-  readonly year: number;
 
   @Column({ type: DataType.INTEGER })
   readonly mileage: number;
@@ -37,6 +35,13 @@ export class Vehicle extends Model {
 
   @BelongsTo(() => Make)
   readonly make: Make;
+
+  @ForeignKey(() => ModelEntity)
+  @Column({ type: DataType.INTEGER, field: 'fk_model_id' })
+  readonly fkModelId: number;
+
+  @BelongsTo(() => ModelEntity)
+  readonly model: ModelEntity;
 }
 
 export default Vehicle;

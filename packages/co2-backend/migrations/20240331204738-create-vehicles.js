@@ -10,10 +10,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      year: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       mileage: {
         type: Sequelize.INTEGER,
         allowNull: false,

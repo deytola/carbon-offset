@@ -1,6 +1,7 @@
 type Tree {
   id: ID!
   species: String!
+  unitPrice: Int!
   age: Int!
 }
 
@@ -12,6 +13,7 @@ type Query {
 
 input CreateTreeInput {
   species: String!
+  unitPrice: Int!
   age: Int!
 }
 

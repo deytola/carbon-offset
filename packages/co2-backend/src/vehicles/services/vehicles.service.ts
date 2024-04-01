@@ -17,14 +17,13 @@ export class VehiclesService {
   }
 
   async createVehicle(vehicleInput: CreateVehicleInput): Promise<Vehicle> {
-    const { year, make, model, mileage, imageURL, mttRatio } = vehicleInput;
+    const { fkMakeId, fkModelId, fkUserId, mileage, imageURL } = vehicleInput;
     return this.vehiclesRepository.create({
-      year,
-      make,
-      model,
+      fkMakeId,
+      fkModelId,
+      fkUserId,
       mileage,
       imageURL,
-      mttRatio,
     });
   }
 }
