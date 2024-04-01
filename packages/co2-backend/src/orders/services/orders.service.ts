@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import Order from '../entities/order.entity';
 import { CreateOrderInput } from '../../graphql';
+import {FindOptions} from 'sequelize';
 
 @Injectable()
 export class OrdersService {
@@ -10,8 +11,12 @@ export class OrdersService {
     private readonly orderRepository: typeof Order,
   ) {}
 
-  async getAllOrders() {
-    return this.orderRepository.findAll();
+  async getAllOrders(options: FindOptions<Order>) {
+    return this.orderRepository.findAll(options);
+  }
+
+  async getOrdersByOptions(options: FindOptions<Order>): Promise<Order[]> {
+    return this.orderRepository.findAll(options);
   }
 
   async getOrder(id: number) {

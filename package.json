@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "lerna run dev"
+    "fe": "lerna run dev",
+    "be": "lerna run start:dev"
   },
   "devDependencies": {
     "lerna": "^8.1.2"

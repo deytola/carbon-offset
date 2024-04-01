@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrdersService } from '../services/orders.service';
 import Order from '../entities/order.entity';
 import { CreateOrderInput } from '../../graphql';
+import sequelize from 'sequelize';
 
 @Resolver()
 export class OrdersResolver {
@@ -9,7 +10,9 @@ export class OrdersResolver {
 
   @Query(() => [Order])
   async orders(): Promise<Order[]> {
-    return this.orderService.getAllOrders();
+    return this.orderService.getAllOrders({
+      order: [['totalPrice', 'DESC']],
+    });
   }
 
   @Query(() => Order)
