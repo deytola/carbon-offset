@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {Button, Grid, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import AuthViewer from "@/app/ui/auth-viewer";
-import AuthUpdater from "@/app/ui/auth-updater";
+import {Counter} from "@/app/components/counter/Counter";
 
 
 const LoginForm = () => {
@@ -81,8 +80,7 @@ const LoginForm = () => {
                         >
                             SIGN UP
                         </Button>
-                        <AuthViewer/>
-                        <AuthUpdater/>
+                        <Counter/>
                     </Box>
                 </Grid>
             </Grid>
