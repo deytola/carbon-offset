@@ -7,12 +7,14 @@ type Vehicle {
   make: Make
   model: Model
   imageURL: String
+  totalTrees: Int
 }
 
 
 type Query {
   vehicle(id: ID!): Vehicle
   vehicles: [Vehicle!]!
+  leaderboard: [Vehicle!]!
 }
 
 input CreateVehicleInput {

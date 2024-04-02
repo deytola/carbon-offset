@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 interface VehicleCardProps{
     image: string;
-    noOfTrees: number;
+    noOfTrees?: number;
     make?: string;
     model?: string;
     isFirst: boolean;

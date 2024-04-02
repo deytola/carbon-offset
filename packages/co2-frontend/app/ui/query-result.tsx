@@ -1,26 +1,45 @@
 'use client';
 import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import {usePathname, useSearchParams, useRouter} from "next/navigation";
-import Image from "next/image";
-import {useDebouncedCallback} from "use-debounce";
+import Typography from "@mui/material/Typography";
 
 
 // @ts-ignore
 export default function QueryResult({loading, error, data, children}) {
     if (error) {
-        return <p>ERROR: {error.message}</p>;
+        return (
+            <Typography
+                variant="h1"
+                component="div"
+                color={(theme)=>theme.palette.secondary.contrastText}
+                textAlign="center"
+            >
+                ERROR: {error.message}
+            </Typography>
+        );
     }
     if (loading) {
-        return <p>Loading...</p>;
+        return (
+            <Typography
+                variant="h1"
+                component="div"
+                color={(theme)=>theme.palette.secondary.contrastText}
+                textAlign="center"
+            >
+                Loading...
+            </Typography>
+        )
     }
     if (!data) {
-        return <p>Nothing to show...</p>;
+        return (
+            <Typography
+                variant="h1"
+                component="div"
+                color={(theme)=>theme.palette.secondary.contrastText}
+                textAlign="center"
+            >
+                Nothing to show...
+            </Typography>
+        )
     }
     if (data) {
         return children;

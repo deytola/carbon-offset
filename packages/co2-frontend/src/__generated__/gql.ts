@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n    query GetOrders {\n        orders{\n            id\n            fkUserId\n            fkTreeId\n            fkVehicleId\n            quantity\n            totalPrice\n        }\n    }\n": types.GetOrdersDocument,
+    "\n    query Leaderboard{\n        leaderboard{\n            id\n            make{\n                name\n            }\n            model{\n                modelName\n            }\n            totalTrees\n        }\n    }\n": types.LeaderboardDocument,
     "\n    query GetMakes {\n        makes{\n            id\n            name\n            originCountry\n        }\n    }\n": types.GetMakesDocument,
 };
 
@@ -34,7 +34,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n    query GetOrders {\n        orders{\n            id\n            fkUserId\n            fkTreeId\n            fkVehicleId\n            quantity\n            totalPrice\n        }\n    }\n"): (typeof documents)["\n    query GetOrders {\n        orders{\n            id\n            fkUserId\n            fkTreeId\n            fkVehicleId\n            quantity\n            totalPrice\n        }\n    }\n"];
+export function gql(source: "\n    query Leaderboard{\n        leaderboard{\n            id\n            make{\n                name\n            }\n            model{\n                modelName\n            }\n            totalTrees\n        }\n    }\n"): (typeof documents)["\n    query Leaderboard{\n        leaderboard{\n            id\n            make{\n                name\n            }\n            model{\n                modelName\n            }\n            totalTrees\n        }\n    }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

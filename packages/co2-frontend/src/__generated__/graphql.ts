@@ -127,12 +127,11 @@ export type Order = {
   id: Scalars['ID']['output'];
   quantity: Scalars['Int']['output'];
   totalPrice: Scalars['Float']['output'];
-  vehicle?: Maybe<Vehicle>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  leaderboard: Array<Order>;
+  leaderboard: Array<Vehicle>;
   make?: Maybe<Make>;
   makes: Array<Make>;
   model?: Maybe<Make>;
@@ -223,12 +222,13 @@ export type Vehicle = {
   make?: Maybe<Make>;
   mileage: Scalars['Int']['output'];
   model?: Maybe<Model>;
+  totalTrees?: Maybe<Scalars['Int']['output']>;
 };
 
-export type GetOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+export type LeaderboardQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrdersQuery = { __typename?: 'Query', orders: Array<{ __typename?: 'Order', id: string, fkUserId: string, fkTreeId: string, fkVehicleId: string, quantity: number, totalPrice: number }> };
+export type LeaderboardQuery = { __typename?: 'Query', leaderboard: Array<{ __typename?: 'Vehicle', id: string, totalTrees?: number | null, make?: { __typename?: 'Make', name: string } | null, model?: { __typename?: 'Model', modelName: string } | null }> };
 
 export type GetMakesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -236,5 +236,5 @@ export type GetMakesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetMakesQuery = { __typename?: 'Query', makes: Array<{ __typename?: 'Make', id: string, name: string, originCountry: string }> };
 
 
-export const GetOrdersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetOrders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"orders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fkUserId"}},{"kind":"Field","name":{"kind":"Name","value":"fkTreeId"}},{"kind":"Field","name":{"kind":"Name","value":"fkVehicleId"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrice"}}]}}]}}]} as unknown as DocumentNode<GetOrdersQuery, GetOrdersQueryVariables>;
+export const LeaderboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"make"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"modelName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalTrees"}}]}}]}}]} as unknown as DocumentNode<LeaderboardQuery, LeaderboardQueryVariables>;
 export const GetMakesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMakes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"makes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"originCountry"}}]}}]}}]} as unknown as DocumentNode<GetMakesQuery, GetMakesQueryVariables>;

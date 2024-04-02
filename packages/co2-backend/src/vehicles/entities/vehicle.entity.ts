@@ -6,11 +6,12 @@ import {
   DataType,
   AutoIncrement,
   ForeignKey,
-  BelongsTo,
+  BelongsTo, HasMany,
 } from 'sequelize-typescript';
 import User from '../../users/entities/user.entity';
 import Make from '../../makes/entities/make.entity';
 import ModelEntity from '../../models/entities/model.entity';
+import Order from "../../orders/entities/order.entity";
 
 @Table
 export class Vehicle extends Model {
@@ -42,6 +43,9 @@ export class Vehicle extends Model {
 
   @BelongsTo(() => ModelEntity)
   readonly model: ModelEntity;
+
+  @HasMany(() => Order)
+  readonly orders: Order[];
 }
 
 export default Vehicle;

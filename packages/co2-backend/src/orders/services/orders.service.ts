@@ -19,10 +19,6 @@ export class OrdersService {
     return this.orderRepository.findAll(options);
   }
 
-  async getOrdersLeaderboard(options: FindOptions<Order>) {
-    return this.orderRepository.findAll(options);
-  }
-
   async getOrdersByOptions(options: FindOptions<Order>): Promise<Order[]> {
     return this.orderRepository.findAll(options);
   }

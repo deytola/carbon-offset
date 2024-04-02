@@ -87,13 +87,13 @@ export interface IQuery {
     models(): Make[] | Promise<Make[]>;
     order(id: string): Nullable<Order> | Promise<Nullable<Order>>;
     orders(): Order[] | Promise<Order[]>;
-    leaderboard(): Order[] | Promise<Order[]>;
     tree(id: string): Nullable<Tree> | Promise<Nullable<Tree>>;
     trees(): Tree[] | Promise<Tree[]>;
     user(id: string): Nullable<User> | Promise<Nullable<User>>;
     users(): User[] | Promise<User[]>;
     vehicle(id: string): Nullable<Vehicle> | Promise<Nullable<Vehicle>>;
     vehicles(): Vehicle[] | Promise<Vehicle[]>;
+    leaderboard(): Vehicle[] | Promise<Vehicle[]>;
 }
 
 export interface Model {
@@ -109,10 +109,8 @@ export interface Order {
     fkUserId: string;
     fkTreeId: string;
     fkVehicleId: string;
-    vehicle?: Nullable<Vehicle>;
     quantity: number;
     totalPrice: number;
-    totalTrees?: Nullable<number>;
 }
 
 export interface Tree {
@@ -141,6 +139,7 @@ export interface Vehicle {
     make?: Nullable<Make>;
     model?: Nullable<Model>;
     imageURL?: Nullable<string>;
+    totalTrees?: Nullable<number>;
 }
 
 type Nullable<T> = T | null;

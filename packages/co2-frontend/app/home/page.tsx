@@ -16,27 +16,23 @@ import DialogActions from "@mui/material/DialogActions";
 import {useRouter} from "next/navigation";
 import ImageUpload from "@/app/ui/image-upload";
 import { useQuery, gql } from "@apollo/client";
-import {Order} from "@/src/__generated__/graphql";
+import {Vehicle} from "@/src/__generated__/graphql";
 import QueryResult from '@/app/ui/query-result';
 
 
 
 /** ORDERS gql query to retrieve all orders ranking */
 const LEADERBOARD = gql`
-    query GetLeaderboard {
+    query Leaderboard{
         leaderboard{
             id
-            vehicle{
-                mileage
-                make{
-                    name
-                }
-                model{
-                    modelName
-                }
+            make{
+                name
             }
-            quantity
-            totalPrice
+            model{
+                modelName
+            }
+            totalTrees
         }
     }
 `;
@@ -126,13 +122,13 @@ function Page() {
                         </Typography>
                     </Box>
                     <QueryResult error={error} loading={loading} data={data}>
-                        {data?.leaderboard?.map((order: Order, index: number) => (
-                            <VehicleCard key={order.id}
+                        {data?.leaderboard?.map((vehicle: Vehicle, index: number) => (
+                            <VehicleCard key={vehicle.id}
                                          isFirst={index===0}
                                          image={'/gogreen.png'}
-                                         noOfTrees={order.quantity}
-                                         make={order.vehicle?.make?.name}
-                                         model={order.vehicle?.model?.modelName}
+                                         noOfTrees={vehicle.totalTrees}
+                                         make={vehicle.make?.name}
+                                         model={vehicle.model?.modelName}
                             />
                         ))}
                     </QueryResult>

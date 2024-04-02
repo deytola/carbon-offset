@@ -19,16 +19,6 @@ export class OrdersResolver {
     });
   }
 
-  @Query(() => [Order])
-  async leaderboard(): Promise<Order[]> {
-    return this.orderService.getOrdersLeaderboard({
-      include: [
-        {model: Vehicle, include: [{model: Make}, {model: ModelEntity}]}
-      ],
-      order: [['totalPrice', 'DESC']],
-    });
-  }
-
   @Query(() => Order)
   async order(@Args('id') id: number): Promise<Order> {
     return this.orderService.getOrder(id);
