@@ -56,6 +56,12 @@ export type CreateVehicleInput = {
   mileage: Scalars['Int']['input'];
 };
 
+export type CreatedUser = {
+  __typename?: 'CreatedUser';
+  token: Scalars['String']['output'];
+  user: User;
+};
+
 export type Make = {
   __typename?: 'Make';
   id: Scalars['ID']['output'];
@@ -79,7 +85,7 @@ export type Mutation = {
   createModel: Model;
   createOrder: Order;
   createTree: Tree;
-  createUser: User;
+  createUser: CreatedUser;
   createVehicle: Vehicle;
   signIn: SuccessResponse;
 };
@@ -202,7 +208,6 @@ export type User = {
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
   orders?: Maybe<Array<Maybe<Order>>>;
-  password: Scalars['String']['output'];
   userRole: Scalars['String']['output'];
 };
 
@@ -235,6 +240,14 @@ export type GetMakesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMakesQuery = { __typename?: 'Query', makes: Array<{ __typename?: 'Make', id: string, name: string, originCountry: string }> };
 
+export type SignInMutationMutationVariables = Exact<{
+  signInInput: SignInInput;
+}>;
+
+
+export type SignInMutationMutation = { __typename?: 'Mutation', signIn: { __typename?: 'SuccessResponse', token: string, user: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, userRole: string } } };
+
 
 export const LeaderboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"make"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"modelName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalTrees"}}]}}]}}]} as unknown as DocumentNode<LeaderboardQuery, LeaderboardQueryVariables>;
 export const GetMakesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMakes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"makes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"originCountry"}}]}}]}}]} as unknown as DocumentNode<GetMakesQuery, GetMakesQueryVariables>;
+export const SignInMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignInMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signInInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignInInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"signInInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signInInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"userRole"}}]}}]}}]}}]} as unknown as DocumentNode<SignInMutationMutation, SignInMutationMutationVariables>;

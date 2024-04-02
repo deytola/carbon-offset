@@ -69,7 +69,7 @@ export interface IMutation {
     createModel(modelInput: CreateModelInput): Model | Promise<Model>;
     createOrder(orderInput: CreateOrderInput): Order | Promise<Order>;
     createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
-    createUser(userInput: CreateUserInput): User | Promise<User>;
+    createUser(userInput: CreateUserInput): CreatedUser | Promise<CreatedUser>;
     createVehicle(vehicleInput: CreateVehicleInput): Vehicle | Promise<Vehicle>;
 }
 
@@ -125,9 +125,13 @@ export interface User {
     firstName: string;
     lastName: string;
     email: string;
-    password: string;
     userRole: string;
     orders?: Nullable<Nullable<Order>[]>;
+}
+
+export interface CreatedUser {
+    token: string;
+    user: User;
 }
 
 export interface Vehicle {

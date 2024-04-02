@@ -14,7 +14,7 @@ export class UsersResolver {
   @Mutation(() => User)
   async createUser(
     @Args('userInput') userInput: CreateUserInput,
-  ): Promise<User> {
+  ): Promise<{ token: string; user: Partial<User> }> {
     return this.usersService.createUser(userInput);
   }
 }

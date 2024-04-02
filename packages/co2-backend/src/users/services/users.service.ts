@@ -21,19 +21,31 @@ export class UsersService {
     return this.userRepository.findOne(options);
   }
 
-  async createUser(userInput: CreateUserInput): Promise<User> {
+  async createUser(
+    userInput: CreateUserInput,
+  ): Promise<{ token: string; user: Partial<User> }> {
     const { firstName, lastName, email, password } = userInput;
     const existingUser = await this.getUserByOptions({
       where: { email },
     });
     if (!existingUser) {
       const hashedPassword: string = await bcrypt.hash(password, 12);
-      return await this.userRepository.create({
+      const createdUser = await this.userRepository.create({
         firstName,
         lastName,
         email,
         password: hashedPassword,
       });
+      const noPasswordUser: Omit<User, 'password'> = <Omit<User, 'password'>>(
+        createdUser
+      );
+      return {
+        token: this.jwtService.sign({
+          noPasswordUser,
+          subject: noPasswordUser.id,
+        }),
+        user: noPasswordUser,
+      };
     } else {
       throw new BadRequestException('User email already exists');
     }

@@ -15,6 +15,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
 const documents = {
     "\n    query Leaderboard{\n        leaderboard{\n            id\n            make{\n                name\n            }\n            model{\n                modelName\n            }\n            totalTrees\n        }\n    }\n": types.LeaderboardDocument,
     "\n    query GetMakes {\n        makes{\n            id\n            name\n            originCountry\n        }\n    }\n": types.GetMakesDocument,
+    "\n    mutation SignInMutation($signInInput: SignInInput!) {\n        signIn(signInInput: $signInInput){\n            token\n            user{\n                id\n                firstName\n                lastName\n                email\n                userRole\n            }\n        }\n    }\n": types.SignInMutationDocument,
 };
 
 /**
@@ -39,6 +40,10 @@ export function gql(source: "\n    query Leaderboard{\n        leaderboard{\n   
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n    query GetMakes {\n        makes{\n            id\n            name\n            originCountry\n        }\n    }\n"): (typeof documents)["\n    query GetMakes {\n        makes{\n            id\n            name\n            originCountry\n        }\n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    mutation SignInMutation($signInInput: SignInInput!) {\n        signIn(signInInput: $signInInput){\n            token\n            user{\n                id\n                firstName\n                lastName\n                email\n                userRole\n            }\n        }\n    }\n"): (typeof documents)["\n    mutation SignInMutation($signInInput: SignInInput!) {\n        signIn(signInInput: $signInInput){\n            token\n            user{\n                id\n                firstName\n                lastName\n                email\n                userRole\n            }\n        }\n    }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};
