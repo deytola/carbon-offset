@@ -8,6 +8,7 @@ import {SuccessResponse} from '@/src/__generated__/graphql';
 import {setToken, setUser} from '@/lib/features/auth/authSlice';
 import {useAppDispatch} from '@/lib/hooks';
 import {useRouter} from 'next/navigation';
+import {useDispatch} from 'react-redux';
 
 
 
@@ -48,6 +49,7 @@ const CREATEUSER = gql`
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
+    const dispatch2 = useDispatch();
     const router = useRouter();
     const [signIn, { loading, error, data }] = useMutation(SIGNINUSER);
     const [signUp, { loading: signUpLoading, error: signUpError, data: signUpData }] = useMutation(CREATEUSER);
@@ -76,10 +78,9 @@ const LoginForm = () => {
                 });
                 // @ts-ignore
                 const token = response.data?.signIn?.token;
-                dispatch(setToken(token));
                 // @ts-ignore
                 const user = response.data?.signIn?.user
-                dispatch(setUser(user));
+                dispatch2('auth/setTokenAndUser',{ token, user});
                 resetForm();
                 router.push('/home');
             }else{
@@ -115,14 +116,6 @@ const LoginForm = () => {
                         <Typography variant="h6" component="h1" textAlign="center" color="primary.dark" fontWeight="light">
                             To keep you connected, please login with your personal details
                         </Typography>
-                        {/*<Button*/}
-                        {/*    type="submit"*/}
-                        {/*    variant="outlined"*/}
-                        {/*    size="large"*/}
-                        {/*    sx={{width: 0.3, color: (theme)=>theme.palette.primary.dark}}*/}
-                        {/*>*/}
-                        {/*    SIGN IN*/}
-                        {/*</Button>*/}
                     </Box>
                 </Grid>
                 <Grid item xs={8}>

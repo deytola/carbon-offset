@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import Cookies from 'js-cookie';
 
 
 
@@ -17,7 +16,6 @@ export const authSlice = createSlice({
         },
         setUser: (state, action) => {
             state.user = action.payload;
-            Cookies.set('user', JSON.stringify(action.payload));
         },
         clearToken: (state) => {
             state.token = null;
