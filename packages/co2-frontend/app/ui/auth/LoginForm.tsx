@@ -3,47 +3,12 @@ import {Button, Grid, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {FetchResult, gql, useMutation} from '@apollo/client';
+import {FetchResult, useMutation} from '@apollo/client';
 import {SuccessResponse} from '@/src/__generated__/graphql';
 import {setToken, setUser} from '@/lib/features/auth/authSlice';
 import {useAppDispatch} from '@/lib/hooks';
 import {useRouter} from 'next/navigation';
-
-
-
-
-/** SIGNINUSER gql mutation to sign in a user */
-const SIGNINUSER = gql`
-    mutation SignInMutation($signInInput: SignInInput!) {
-        signIn(signInInput: $signInInput){
-            token
-            user{
-                id
-                firstName
-                lastName
-                email
-                userRole
-            }
-        }
-    }
-`;
-
-/** CREATEUSER gql mutation to create a user */
-const CREATEUSER = gql`
-    mutation CreateUser($userInput: CreateUserInput!) {
-        createUser(userInput: $userInput) {
-            token
-            user{
-                id
-                firstName
-                lastName
-                email
-                userRole
-            }
-        }
-    }
-`;
-
+import {CREATEUSER, SIGNINUSER} from '@/src/mutations';
 
 
 const LoginForm = () => {
@@ -71,6 +36,7 @@ const LoginForm = () => {
                     email,
                     password
                 };
+                console.log(signInInput)
                 const response: FetchResult<SuccessResponse> = await signIn({
                     variables: { signInInput },
                 });
@@ -97,7 +63,8 @@ const LoginForm = () => {
                 router.refresh();
             }
         } catch (error) {
-            console.error('an error occured:', error.message);
+            // @ts-ignore
+            console.error('An error occurred:', error.message);
         }
     };
     const handleUserAction = () => {

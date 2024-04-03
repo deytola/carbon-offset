@@ -14,6 +14,7 @@ export const authSlice = createSlice({
         setToken: (state, action) => {
             state.token = action.payload;
             state.isAuthenticated = true;
+            Cookies.set('token', JSON.stringify(action.payload));
         },
         setUser: (state, action) => {
             state.user = action.payload;

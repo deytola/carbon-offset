@@ -1,5 +1,4 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -51,7 +50,6 @@ export type CreateUserInput = {
 export type CreateVehicleInput = {
   fkMakeId: Scalars['Int']['input'];
   fkModelId: Scalars['Int']['input'];
-  fkUserId: Scalars['Int']['input'];
   imageURL?: InputMaybe<Scalars['String']['input']>;
   mileage: Scalars['Int']['input'];
 };
@@ -75,7 +73,7 @@ export type Model = {
   fkMakeId: Scalars['Int']['output'];
   id: Scalars['ID']['output'];
   modelName: Scalars['String']['output'];
-  mttRatio: Scalars['Int']['output'];
+  mttRatio: Scalars['Float']['output'];
   year: Scalars['Int']['output'];
 };
 
@@ -88,6 +86,7 @@ export type Mutation = {
   createUser: CreatedUser;
   createVehicle: Vehicle;
   signIn: SuccessResponse;
+  vehiclesByUserId: Array<Vehicle>;
 };
 
 
@@ -125,6 +124,11 @@ export type MutationSignInArgs = {
   signInInput: SignInInput;
 };
 
+
+export type MutationVehiclesByUserIdArgs = {
+  fkUserId: Scalars['ID']['input'];
+};
+
 export type Order = {
   __typename?: 'Order';
   fkTreeId: Scalars['ID']['output'];
@@ -142,6 +146,7 @@ export type Query = {
   makes: Array<Make>;
   model?: Maybe<Make>;
   models: Array<Make>;
+  myVehicles: Array<Vehicle>;
   order?: Maybe<Order>;
   orders: Array<Order>;
   tree?: Maybe<Tree>;
@@ -229,25 +234,3 @@ export type Vehicle = {
   model?: Maybe<Model>;
   totalTrees?: Maybe<Scalars['Int']['output']>;
 };
-
-export type LeaderboardQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LeaderboardQuery = { __typename?: 'Query', leaderboard: Array<{ __typename?: 'Vehicle', id: string, totalTrees?: number | null, make?: { __typename?: 'Make', name: string } | null, model?: { __typename?: 'Model', modelName: string } | null }> };
-
-export type GetMakesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetMakesQuery = { __typename?: 'Query', makes: Array<{ __typename?: 'Make', id: string, name: string, originCountry: string }> };
-
-export type SignInMutationMutationVariables = Exact<{
-  signInInput: SignInInput;
-}>;
-
-
-export type SignInMutationMutation = { __typename?: 'Mutation', signIn: { __typename?: 'SuccessResponse', token: string, user: { __typename?: 'User', id: string, firstName: string, lastName: string, email: string, userRole: string } } };
-
-
-export const LeaderboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"leaderboard"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"make"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"modelName"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalTrees"}}]}}]}}]} as unknown as DocumentNode<LeaderboardQuery, LeaderboardQueryVariables>;
-export const GetMakesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMakes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"makes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"originCountry"}}]}}]}}]} as unknown as DocumentNode<GetMakesQuery, GetMakesQueryVariables>;
-export const SignInMutationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SignInMutation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signInInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SignInInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signIn"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"signInInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signInInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"token"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"firstName"}},{"kind":"Field","name":{"kind":"Name","value":"lastName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"userRole"}}]}}]}}]}}]} as unknown as DocumentNode<SignInMutationMutation, SignInMutationMutationVariables>;

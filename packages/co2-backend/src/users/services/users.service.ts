@@ -37,12 +37,11 @@ export class UsersService {
         password: hashedPassword,
       });
       const noPasswordUser: Omit<User, 'password'> = <Omit<User, 'password'>>(
-        createdUser
+        Object.assign({ ...createdUser.get(), password: undefined })
       );
       return {
         token: this.jwtService.sign({
-          noPasswordUser,
-          subject: noPasswordUser.id,
+          user: noPasswordUser,
         }),
         user: noPasswordUser,
       };

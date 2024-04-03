@@ -23,7 +23,9 @@ export class VehiclesService {
     return this.vehiclesRepository.findByPk(id);
   }
 
-  async createVehicle(vehicleInput: CreateVehicleInput): Promise<Vehicle> {
+  async createVehicle(
+    vehicleInput: CreateVehicleInput & { fkUserId: number },
+  ): Promise<Vehicle> {
     const { fkMakeId, fkModelId, fkUserId, mileage, imageURL } = vehicleInput;
     return this.vehiclesRepository.create({
       fkMakeId,

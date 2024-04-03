@@ -1,35 +1,40 @@
 import {
-  CanActivate,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Request } from 'express';
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthGuard {
   constructor(private jwtService: JwtService) {}
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    const ctx = GqlExecutionContext.create(context);
+    const request = ctx.getContext().req; // Access GraphQL request object
+
     const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
-      // 💡 Assigning the payload to the request object here
-      // so that I can access it in the resolver
-      request['user'] = await this.jwtService.verifyAsync(token, {
+      // Attach user to GraphQL context
+      ctx.getContext().user = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
     } catch (error) {
       throw new UnauthorizedException();
     }
+
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
+  private extractTokenFromHeader(request: any): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+    const removeExtraQuoteRegex: RegExp = /^"|"$/g;
+    const cleanToken = token.replace(removeExtraQuoteRegex, '');
+    return type === 'Bearer' ? cleanToken : undefined;
   }
 }

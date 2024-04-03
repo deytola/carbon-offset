@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UsersService } from '../../users/services/users.service';
 import { SignInInput } from '../../graphql';
 import { SignInResponse } from '../auth-types';
+import User from '../../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -23,11 +24,13 @@ export class AuthService {
     if (!(await bcrypt.compare(signInInput.password, savedUser.password))) {
       throw new BadRequestException('Invalid login credentials');
     }
-    const userWithoutPassword = { ...savedUser.get(), password: undefined };
+    const userWithoutPassword: Partial<User> = Object.assign({
+      ...savedUser.get(),
+      password: undefined,
+    });
     return {
       token: this.jwtService.sign({
-        userWithoutPassword,
-        subject: userWithoutPassword.id,
+        user: userWithoutPassword,
       }),
       user: userWithoutPassword,
     };

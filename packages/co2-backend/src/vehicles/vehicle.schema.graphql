@@ -14,18 +14,19 @@ type Vehicle {
 type Query {
   vehicle(id: ID!): Vehicle
   vehicles: [Vehicle!]!
+  myVehicles: [Vehicle!]!
   leaderboard: [Vehicle!]!
 }
 
 input CreateVehicleInput {
-  fkMakeId: Int!
-  fkModelId: Int!
-  fkUserId: Int!
-  mileage: Int!
-  imageURL: String
+fkMakeId: Int!
+fkModelId: Int!
+mileage: Int!
+imageURL: String
 }
 
 type Mutation {
   createVehicle(vehicleInput: CreateVehicleInput!): Vehicle!
+  vehiclesByUserId(fkUserId: ID!): [Vehicle!]!
 }
 

@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
 import {FormControl, InputLabel, MenuItem, Select, Stack} from "@mui/material";
 import Header from "@/app/ui/header";
@@ -15,40 +15,20 @@ import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import {useRouter} from "next/navigation";
 import ImageUpload from "@/app/ui/image-upload";
-import { useQuery, gql } from "@apollo/client";
+import {useMutation, useQuery} from "@apollo/client";
 import {Vehicle} from "@/src/__generated__/graphql";
 import QueryResult from '@/app/ui/query-result';
+import {LEADERBOARD, MY_VEHICLES} from '@/src/queries';
+import {useAppSelector} from '@/lib/hooks';
+import {selectUser} from '@/lib/features/auth/authSlice';
+import Cookies from 'js-cookie';
+import {VEHICLES_BY_USER_ID} from '@/src/mutations';
 
 
-
-/** ORDERS gql query to retrieve all orders ranking */
-const LEADERBOARD = gql`
-    query Leaderboard{
-        leaderboard{
-            id
-            make{
-                name
-            }
-            model{
-                modelName
-            }
-            totalTrees
-        }
-    }
-`;
-
-/** MAKES gql query to retrieve all vehicle makes */
-const MAKES = gql`
-    query GetMakes {
-        makes{
-            id
-            name
-            originCountry
-        }
-    }
-`;
 function Page() {
     const [open, setOpen] = useState(false);
+    const [userVehicles, setUserVehicles] = useState([]);
+    const user = Cookies.get('user');
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -58,15 +38,31 @@ function Page() {
     };
 
     const { loading, error, data } = useQuery(LEADERBOARD);
+    const { loading: uvLoading, error: uvError, data: uvData } = useQuery(MY_VEHICLES);
+    const [getVehiclesByUserId] = useMutation(VEHICLES_BY_USER_ID);
 
-    const carMakes = ['Toyota', 'Honda', 'Ford', 'Chevrolet'];
-    const carModels = {
-        Toyota: ['Corolla', 'Camry', 'RAV4'],
-        Honda: ['Civic', 'Accord', 'CR-V'],
-        Ford: ['F-150', 'Escape', 'Focus'],
-        Chevrolet: ['Silverado', 'Equinox', 'Malibu']
-    };
-    const fuelTypes = ['Gasoline', 'Diesel', 'Electric'];
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         const res = await getVehiclesByUserId({
+    //             variables: { fkUserId: 18 },
+    //         })
+    //         setUserVehicles(res.data?.vehiclesByUserId);
+    //     };
+    //     fetchData();
+    // }, []);
+
+    useEffect(() => {
+        if(uvData){
+            console.log("uvData", uvData);
+            setUserVehicles(uvData?.myVehicles);
+        }
+        if(uvError){
+            console.log("uvError", uvError);
+        }
+        if(uvLoading){
+            console.log("uvLoading", uvLoading);
+        }
+    }, [uvData]);
 
     const [formData, setFormData] = useState({
         year: '',
@@ -78,7 +74,8 @@ function Page() {
         mttRatio: 0
     });
 
-    const handleChange = (e) => {
+    const handleVehicleChange = (e) => {
+        console.log("New Vehicle Selected...");
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -162,76 +159,48 @@ function Page() {
                         <Box
                             sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
                             <form onSubmit={handleSubmit}>
-                                <TextField
-                                    label="Year"
-                                    name="year"
-                                    value={formData.year}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    margin="normal"
-                                />
                                 <FormControl fullWidth margin="normal">
                                     <InputLabel>Make</InputLabel>
                                     <Select
                                         value={formData.make}
-                                        onChange={handleChange}
-                                        name="make"
+                                        onChange={handleVehicleChange}
+                                        name="vehicle"
                                     >
-                                        {carMakes.map((make, index) => (
-                                            <MenuItem key={index} value={make}>{make}</MenuItem>
+                                        {userVehicles.map((vehicle: Vehicle, index) => (
+                                            <MenuItem key={index} value={vehicle?.id}>{`${vehicle.make?.name} ${vehicle.model?.modelName}`}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Model</InputLabel>
-                                    <Select
-                                        value={formData.model}
-                                        onChange={handleChange}
-                                        name="model"
-                                    >
-                                        {formData.make && carModels[formData.make].map((model, index) => (
-                                            <MenuItem key={index} value={model}>{model}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    label="Mileage"
-                                    name="mileage"
-                                    value={formData.mileage}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    margin="normal"
-                                />
-                                <FormControl fullWidth margin="normal">
-                                    <InputLabel>Fuel Type</InputLabel>
-                                    <Select
-                                        value={formData.fuelType}
-                                        onChange={handleChange}
-                                        name="fuelType"
-                                    >
-                                        {fuelTypes.map((type, index) => (
-                                            <MenuItem key={index} value={type}>{type}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                                <TextField
-                                    label="Miles Per Gallon"
-                                    name="milesPerGallon"
-                                    value={formData.milesPerGallon}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    margin="normal"
-                                />
-                                <TextField
-                                    label="MTT Ratio"
-                                    name="mttRatio"
-                                    value={formData.mttRatio}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    type="number"
-                                    InputProps={{ inputProps: { min: 0 } }}
-                                    margin="normal"
-                                />
+                                {/*<FormControl fullWidth margin="normal">*/}
+                                {/*    <InputLabel>Model</InputLabel>*/}
+                                {/*    <Select*/}
+                                {/*        value={formData.model}*/}
+                                {/*        onChange={handleChange}*/}
+                                {/*        name="model"*/}
+                                {/*    >*/}
+                                {/*        {formData.make && carModels[formData.make].map((model, index) => (*/}
+                                {/*            <MenuItem key={index} value={model}>{model}</MenuItem>*/}
+                                {/*        ))}*/}
+                                {/*    </Select>*/}
+                                {/*</FormControl>*/}
+                                {/*<TextField*/}
+                                {/*    label="Mileage"*/}
+                                {/*    name="mileage"*/}
+                                {/*    value={formData.mileage}*/}
+                                {/*    onChange={handleChange}*/}
+                                {/*    fullWidth*/}
+                                {/*    margin="normal"*/}
+                                {/*/>*/}
+                                {/*<TextField*/}
+                                {/*    label="MTT Ratio"*/}
+                                {/*    name="mttRatio"*/}
+                                {/*    value={formData.mttRatio}*/}
+                                {/*    onChange={handleChange}*/}
+                                {/*    fullWidth*/}
+                                {/*    type="number"*/}
+                                {/*    InputProps={{ inputProps: { min: 0 } }}*/}
+                                {/*    margin="normal"*/}
+                                {/*/>*/}
                                 <Box sx={{mt: 2, mb: 2}}>
                                     <ImageUpload/>
                                 </Box>

@@ -2,7 +2,7 @@ type Model {
     id: ID!
     modelName: String!
     year: Int!
-    mttRatio: Int!
+    mttRatio: Float!
     fkMakeId: Int!
 }
 

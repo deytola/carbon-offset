@@ -25,7 +25,7 @@ export default function RootLayout({
     return (
         <StoreProvider>
             <html lang="en">
-            <body className={inter.className} style={{margin: 0, overflowY: 'hidden'}}>
+            <body className={inter.className} style={{margin: 0}}>
             <AppRouterCacheProvider>
                 <ThemeProvider theme={theme}>
                     <ApolloWrapper>

@@ -48,7 +48,6 @@ export interface CreateUserInput {
 export interface CreateVehicleInput {
     fkMakeId: number;
     fkModelId: number;
-    fkUserId: number;
     mileage: number;
     imageURL?: Nullable<string>;
 }
@@ -71,6 +70,7 @@ export interface IMutation {
     createTree(treeInput: CreateTreeInput): Tree | Promise<Tree>;
     createUser(userInput: CreateUserInput): CreatedUser | Promise<CreatedUser>;
     createVehicle(vehicleInput: CreateVehicleInput): Vehicle | Promise<Vehicle>;
+    vehiclesByUserId(fkUserId: string): Vehicle[] | Promise<Vehicle[]>;
 }
 
 export interface Make {
@@ -93,6 +93,7 @@ export interface IQuery {
     users(): User[] | Promise<User[]>;
     vehicle(id: string): Nullable<Vehicle> | Promise<Nullable<Vehicle>>;
     vehicles(): Vehicle[] | Promise<Vehicle[]>;
+    myVehicles(): Vehicle[] | Promise<Vehicle[]>;
     leaderboard(): Vehicle[] | Promise<Vehicle[]>;
 }
 
