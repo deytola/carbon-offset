@@ -25,10 +25,7 @@ export default function VehicleCard(props: VehicleCardProps) {
         >
             <Avatar sx={{width: 100, height: 100}} src={props.image} />
             <Typography variant="h4" sx={{color: (theme)=>theme.palette.primary.dark}}>
-                {`${props.make} ${props.model}`}
-            </Typography>
-            <Typography variant="h4" display={props.isFirst ? 'block': 'none'}>
-                🥇
+                {`${props.make} ${props.model} ${props.isFirst?'🥇':''}`}
             </Typography>
             <Typography  variant="h4" sx={{color: (theme)=>theme.palette.primary.dark}}>
                 {props.noOfTrees} 🌳

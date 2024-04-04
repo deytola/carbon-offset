@@ -50,3 +50,20 @@ export const VEHICLES_BY_USER_ID = gql`
         }
     }
 `;
+
+
+/** PLACE_ORDER gql mutation to place order for tree */
+export const PLACE_ORDER = gql`
+    mutation CreateOrder($orderInput: CreateOrderInput!) {
+        createOrder(orderInput: $orderInput) {
+            id
+            fkUserId
+            fkTreeId
+            quantity
+            totalPrice
+        }
+    }
+
+`;
+
+

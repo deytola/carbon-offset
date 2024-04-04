@@ -1,8 +1,8 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import Order from '../entities/order.entity';
 import { CreateOrderInput } from '../../graphql';
-import {FindOptions} from 'sequelize';
+import { FindOptions } from 'sequelize';
 import Tree from '../../trees/entities/tree.entity';
 
 @Injectable()
@@ -12,7 +12,6 @@ export class OrdersService {
     private readonly orderRepository: typeof Order,
     @InjectModel(Tree)
     private readonly treeRepository: typeof Tree,
-
   ) {}
 
   async getAllOrders(options: FindOptions<Order>) {
@@ -27,14 +26,17 @@ export class OrdersService {
     return this.orderRepository.findByPk(id);
   }
 
-  async createOrder(orderInput: CreateOrderInput): Promise<Order|BadRequestException> {
+  async createOrder(
+    orderInput: CreateOrderInput & { fkUserId: number },
+  ): Promise<Order | BadRequestException> {
     let totalPrice: number;
-    const { fkUserId, fkTreeId, fkVehicleId, quantity } =
-      orderInput;
-    const savedTree: Tree = await this.treeRepository.findByPk(Number(fkTreeId));
-    if(savedTree) {
+    const { fkUserId, fkTreeId, fkVehicleId, quantity } = orderInput;
+    const savedTree: Tree = await this.treeRepository.findByPk(
+      Number(fkTreeId),
+    );
+    if (savedTree) {
       totalPrice = savedTree.unitPrice * quantity;
-    }else{
+    } else {
       return new BadRequestException('invalid tree id');
     }
     return this.orderRepository.create({

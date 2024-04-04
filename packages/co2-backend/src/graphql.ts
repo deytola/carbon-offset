@@ -26,7 +26,6 @@ export interface CreateModelInput {
 }
 
 export interface CreateOrderInput {
-    fkUserId: number;
     fkTreeId: number;
     fkVehicleId: number;
     quantity: number;

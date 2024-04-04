@@ -36,7 +36,6 @@ const LoginForm = () => {
                     email,
                     password
                 };
-                console.log(signInInput)
                 const response: FetchResult<SuccessResponse> = await signIn({
                     variables: { signInInput },
                 });
@@ -82,14 +81,6 @@ const LoginForm = () => {
                         <Typography variant="h6" component="h1" textAlign="center" color="primary.dark" fontWeight="light">
                             To keep you connected, please login with your personal details
                         </Typography>
-                        {/*<Button*/}
-                        {/*    type="submit"*/}
-                        {/*    variant="outlined"*/}
-                        {/*    size="large"*/}
-                        {/*    sx={{width: 0.3, color: (theme)=>theme.palette.primary.dark}}*/}
-                        {/*>*/}
-                        {/*    SIGN IN*/}
-                        {/*</Button>*/}
                     </Box>
                 </Grid>
                 <Grid item xs={8}>

@@ -1,12 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OrdersService } from '../services/orders.service';
 import Order from '../entities/order.entity';
-import { CreateOrderInput } from '../../graphql';
-import sequelize from 'sequelize';
-import {BadRequestException} from '@nestjs/common';
-import Vehicle from '../../vehicles/entities/vehicle.entity';
-import Make from '../../makes/entities/make.entity';
-import ModelEntity from '../../models/entities/model.entity';
+import { CreateOrderInput, User } from '../../graphql';
+import { BadRequestException, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '../../auth/guards/auth.guard';
+import { CurrentUser } from '../../common/current-user-decorator';
 
 @Resolver()
 export class OrdersResolver {
@@ -24,10 +22,15 @@ export class OrdersResolver {
     return this.orderService.getOrder(id);
   }
 
+  @UseGuards(AuthGuard)
   @Mutation(() => Order)
   async createOrder(
-    @Args('orderInput') orderInput: CreateOrderInput,
-  ): Promise<Order|BadRequestException> {
-    return this.orderService.createOrder(orderInput);
+    @CurrentUser() user: User,
+    @Args('orderInput') orderInput: CreateOrderInput & { fkUserId: number },
+  ): Promise<Order | BadRequestException> {
+    return this.orderService.createOrder({
+      ...orderInput,
+      fkUserId: Number(user.id),
+    });
   }
 }

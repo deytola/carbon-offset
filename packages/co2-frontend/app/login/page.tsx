@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 
-import LoginForm from "@/app/ui/auth/LoginForm";
+import LoginForm from "@/app/components/auth/LoginForm";
 
 
 export default function Page() {

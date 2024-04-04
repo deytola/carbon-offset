@@ -1,90 +1,104 @@
 "use client";
 import React, {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
-import {FormControl, InputLabel, MenuItem, Select, Stack} from "@mui/material";
-import Header from "@/app/ui/header";
+import {FormControl, FormHelperText, Input, InputLabel, MenuItem, OutlinedInput, Select, Stack} from "@mui/material";
+import Header from "@/app/components/header";
 import Box from "@mui/material/Box";
-import VehicleCard from "@/app/ui/vehiclecard";
-import NewVehicleBtn from "@/app/ui/new-vehicle-btn";
+import VehicleCard from "@/app/components/vehiclecard";
+import NewVehicleBtn from "@/app/components/new-vehicle-btn";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
-import TextField from "@mui/material/TextField";
 import DialogActions from "@mui/material/DialogActions";
 import {useRouter} from "next/navigation";
-import ImageUpload from "@/app/ui/image-upload";
-import {useMutation, useQuery} from "@apollo/client";
-import {Vehicle} from "@/src/__generated__/graphql";
-import QueryResult from '@/app/ui/query-result';
-import {LEADERBOARD, MY_VEHICLES} from '@/src/queries';
-import {useAppSelector} from '@/lib/hooks';
-import {selectUser} from '@/lib/features/auth/authSlice';
+import ImageUpload from "@/app/components/image-upload";
+import {FetchResult, useMutation, useQuery} from "@apollo/client";
+import {Make, Model, Order, SuccessResponse, Tree, Vehicle} from "@/src/__generated__/graphql";
+import QueryResult from '@/app/components/query-result';
+import {LEADERBOARD, MY_VEHICLES, TREES} from '@/src/queries';
+import {useAppDispatch, useAppSelector} from '@/lib/hooks';
+import {clearToken} from '@/lib/features/auth/authSlice';
 import Cookies from 'js-cookie';
-import {VEHICLES_BY_USER_ID} from '@/src/mutations';
+import LogoutBtn from '@/app/components/auth/logout-btn';
+import {Maybe} from 'graphql/jsutils/Maybe';
+import {PLACE_ORDER} from '@/src/mutations';
 
 
 function Page() {
+    const dispatch = useAppDispatch();
     const [open, setOpen] = useState(false);
-    const [userVehicles, setUserVehicles] = useState([]);
+    const [userVehicles, setUserVehicles] = useState<Maybe<Vehicle[]>>([]);
+    const [availableTrees, setAvailableTrees] = useState<Maybe<Tree[]>>([]);
     const user = Cookies.get('user');
     const handleClickOpen = () => {
         setOpen(true);
     };
 
+    const handleLogout = () => {
+        dispatch(clearToken());
+        Cookies.remove('token');
+        Cookies.remove('user');
+        router.push('/login');
+    };
+
     const handleClose = () => {
         setOpen(false);
+        router.refresh();
     };
 
     const { loading, error, data } = useQuery(LEADERBOARD);
     const { loading: uvLoading, error: uvError, data: uvData } = useQuery(MY_VEHICLES);
-    const [getVehiclesByUserId] = useMutation(VEHICLES_BY_USER_ID);
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const res = await getVehiclesByUserId({
-    //             variables: { fkUserId: 18 },
-    //         })
-    //         setUserVehicles(res.data?.vehiclesByUserId);
-    //     };
-    //     fetchData();
-    // }, []);
+    const { loading: treesLoading, error: treesError, data: treesData } = useQuery(TREES);
+    const [placeOrderForTree, { loading: orderLoading, error: orderError, data: orderData }] = useMutation(PLACE_ORDER);
 
     useEffect(() => {
         if(uvData){
-            console.log("uvData", uvData);
             setUserVehicles(uvData?.myVehicles);
         }
-        if(uvError){
-            console.log("uvError", uvError);
-        }
-        if(uvLoading){
-            console.log("uvLoading", uvLoading);
-        }
     }, [uvData]);
+    useEffect(() => {
+        if(treesData){
+            setAvailableTrees(treesData?.trees);
+        }
+    }, [treesData]);
 
-    const [formData, setFormData] = useState({
-        year: '',
-        make: '',
-        model: '',
-        mileage: '',
-        fuelType: '',
-        milesPerGallon: '',
-        mttRatio: 0
+    interface FormData{
+        vehicle: Maybe<Vehicle>
+        make: Maybe<Make>
+        model: Maybe<Model>
+        tree: Maybe<Tree>
+        recommendedNoOfTrees?: number,
+        orderTotal?: number,
+    }
+    const [formData , setFormData] = useState<FormData>({
+        make: undefined,
+        model: undefined,
+        vehicle: undefined,
+        tree: undefined,
+        recommendedNoOfTrees: 0,
+        orderTotal: 0,
     });
 
+
     const handleVehicleChange = (e) => {
-        console.log("New Vehicle Selected...");
+        const selectedVehicle = userVehicles?.find((vehicle: Vehicle)=>vehicle.id===e.target.value);
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            vehicle: selectedVehicle,
+            make: selectedVehicle?.make,
+            model: selectedVehicle?.model,
+            recommendedNoOfTrees: Number((selectedVehicle?.mileage/selectedVehicle?.model?.mttRatio)||0).toFixed(2)
         });
     };
-
-    const handleCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        router.push('/home');
+    const handleTreeChange = (e) => {
+        const selectedTree = availableTrees?.find((tree: Tree)=>tree.id===e.target.value);
+        setFormData({
+            ...formData,
+            tree: selectedTree,
+            orderTotal: selectedTree?.unitPrice*formData.recommendedNoOfTrees
+        });
     };
 
     const handleSubmit = (e) => {
@@ -93,6 +107,23 @@ function Page() {
         console.log(formData);
     };
     const router = useRouter();
+
+    const formatToCurrency = (numberToFormat: unknown) => {
+        return numberToFormat.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    }
+
+    const formatToNumber = (numberToFormat: unknown) => {
+        return numberToFormat?.toLocaleString('en-US');
+    }
+
+    const handleNoOfTreesChange = (e)=>{
+        setFormData({
+            ...formData,
+            recommendedNoOfTrees: Number(e.target.value).toFixed(2),
+            orderTotal: formData.tree?.unitPrice * Number(e.target.value)
+        });
+    }
+
 
 
     return (
@@ -131,6 +162,7 @@ function Page() {
                     </QueryResult>
                 </Stack>
                 <NewVehicleBtn handleClick={handleClickOpen}/>
+                <LogoutBtn handleClick={handleLogout}/>
             </Box>
             <>
                 <Dialog
@@ -138,12 +170,16 @@ function Page() {
                     onClose={handleClose}
                     PaperProps={{
                         component: 'form',
-                        onSubmit: (event: React.FormEvent<HTMLFormElement>) => {
-                            event.preventDefault();
-                            const formData = new FormData(event.currentTarget);
-                            const formJson = Object.fromEntries((formData as any).entries());
-                            const email = formJson.email;
-                            console.log(email);
+                        onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+                            const orderInput = {
+                                fkTreeId: Number(formData.tree?.id),
+                                fkVehicleId: Number(formData.vehicle?.id),
+                                quantity: parseInt(formData.recommendedNoOfTrees)
+                            }
+                            const response: FetchResult<Order> = await placeOrderForTree({
+                                variables: { orderInput },
+                            });
+                            console.log(response.data);
                             handleClose();
                         },
                     }}
@@ -158,56 +194,95 @@ function Page() {
                         </DialogContentText>
                         <Box
                             sx={{display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-                            <form onSubmit={handleSubmit}>
+                            {/*<form onSubmit={handleSubmit}>*/}
                                 <FormControl fullWidth margin="normal">
-                                    <InputLabel>Make</InputLabel>
+                                    <InputLabel required={true} id="label-for-vehicles" >Vehicles</InputLabel>
                                     <Select
-                                        value={formData.make}
+                                        value={formData.vehicle?.id}
                                         onChange={handleVehicleChange}
-                                        name="vehicle"
+                                        labelId="label-for-vehicles"
+                                        label="Vehicles"
                                     >
-                                        {userVehicles.map((vehicle: Vehicle, index) => (
-                                            <MenuItem key={index} value={vehicle?.id}>{`${vehicle.make?.name} ${vehicle.model?.modelName}`}</MenuItem>
+                                        {userVehicles?.map((vehicle: Vehicle, index) => (
+                                            <MenuItem key={index} value={vehicle.id}>{`${vehicle.make?.name} ${vehicle.model?.modelName}`}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-                                {/*<FormControl fullWidth margin="normal">*/}
-                                {/*    <InputLabel>Model</InputLabel>*/}
-                                {/*    <Select*/}
-                                {/*        value={formData.model}*/}
-                                {/*        onChange={handleChange}*/}
-                                {/*        name="model"*/}
-                                {/*    >*/}
-                                {/*        {formData.make && carModels[formData.make].map((model, index) => (*/}
-                                {/*            <MenuItem key={index} value={model}>{model}</MenuItem>*/}
-                                {/*        ))}*/}
-                                {/*    </Select>*/}
-                                {/*</FormControl>*/}
-                                {/*<TextField*/}
-                                {/*    label="Mileage"*/}
-                                {/*    name="mileage"*/}
-                                {/*    value={formData.mileage}*/}
-                                {/*    onChange={handleChange}*/}
-                                {/*    fullWidth*/}
-                                {/*    margin="normal"*/}
-                                {/*/>*/}
-                                {/*<TextField*/}
-                                {/*    label="MTT Ratio"*/}
-                                {/*    name="mttRatio"*/}
-                                {/*    value={formData.mttRatio}*/}
-                                {/*    onChange={handleChange}*/}
-                                {/*    fullWidth*/}
-                                {/*    type="number"*/}
-                                {/*    InputProps={{ inputProps: { min: 0 } }}*/}
-                                {/*    margin="normal"*/}
-                                {/*/>*/}
-                                <Box sx={{mt: 2, mb: 2}}>
-                                    <ImageUpload/>
-                                </Box>
-                            </form>
+                                <FormHelperText>Please select vehicle for which you would like to offset carbon footprint.</FormHelperText>
+                                <FormControl fullWidth margin="normal">
+                                    {/*<InputLabel required={true} id="label-for-make" >Make</InputLabel>*/}
+                                    <OutlinedInput
+                                        value={formData.make?.name}
+                                        fullWidth
+                                        required
+                                        name="make"
+                                        placeholder={'Vehicle Make'}
+                                        disabled={true}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <OutlinedInput
+                                        value={formData.model?.modelName}
+                                        fullWidth
+                                        required
+                                        name="model"
+                                        placeholder={'Vehicle Model'}
+                                        disabled={true}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <OutlinedInput
+                                        value={formatToNumber(formData.model?.mttRatio)}
+                                        fullWidth
+                                        required
+                                        name="mttRatio"
+                                        placeholder={'Miles to Trees Ratio'}
+                                        disabled={true}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <OutlinedInput
+                                        value={formatToNumber(formData.vehicle?.mileage)}
+                                        fullWidth
+                                        required
+                                        name="mileage"
+                                        placeholder={'Mileage'}
+                                        disabled={true}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <OutlinedInput
+                                        value={formData.recommendedNoOfTrees}
+                                        onChange={handleNoOfTreesChange}
+                                        fullWidth
+                                        required
+                                        disabled={!Boolean(formData.tree)}
+                                        name="recommendedNoOfTrees"
+                                        placeholder={'Recommended Number of Trees'}
+                                    />
+                                </FormControl>
+                                <FormControl fullWidth margin="normal">
+                                    <InputLabel required={true} id="label-for-trees" >Trees</InputLabel>
+                                    <Select
+                                        value={formData.tree?.id}
+                                        onChange={handleTreeChange}
+                                        labelId="label-for-trees"
+                                        label="Trees"
+                                    >
+                                        {availableTrees?.map((tree: Tree, index) => (
+                                            <MenuItem key={index} value={tree.id}>{`${tree.species} - (${formatToCurrency(tree.unitPrice)})`}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <FormHelperText>Please select tree to purchase.</FormHelperText>
+                                <Typography variant="h5" sx={{color: 'primary.dark'}}>{`Order total: ${formatToCurrency(formData.orderTotal)}`}</Typography>
+                                {/*<Box sx={{mt: 2, mb: 2}}>*/}
+                                {/*    <ImageUpload/>*/}
+                                {/*</Box>*/}
+                            {/*</form>*/}
                             <DialogActions>
                                 <Button variant="contained" color="error" sx={{mr: 1}} onClick={handleClose}>Cancel</Button>
-                                <Button variant="contained" type="submit">Buy</Button>
+                                <Button variant="contained" type={'submit'}>Buy</Button>
                             </DialogActions>
                         </Box>
                     </DialogContent>

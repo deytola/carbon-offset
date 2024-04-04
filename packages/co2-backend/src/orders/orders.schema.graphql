@@ -14,7 +14,6 @@ type Query {
 }
 
 input CreateOrderInput {
-    fkUserId: Int!
     fkTreeId: Int!
     fkVehicleId: Int!
     quantity: Int!

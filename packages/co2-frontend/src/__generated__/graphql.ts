@@ -29,7 +29,6 @@ export type CreateModelInput = {
 
 export type CreateOrderInput = {
   fkTreeId: Scalars['Int']['input'];
-  fkUserId: Scalars['Int']['input'];
   fkVehicleId: Scalars['Int']['input'];
   quantity: Scalars['Int']['input'];
 };

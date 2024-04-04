@@ -32,6 +32,7 @@ export const MY_VEHICLES = gql`
     query GetMyVehicles {
         myVehicles{
             id
+            mileage
             fkUserId
             make{
                 id
@@ -42,6 +43,19 @@ export const MY_VEHICLES = gql`
                 modelName,
                 mttRatio
             }
+        }
+    }
+`;
+
+
+/** TREES gql query to retrieve available trees */
+export const TREES = gql`
+    query GetAvailableTrees {
+        trees{
+            id
+            species
+            age
+            unitPrice
         }
     }
 `;
