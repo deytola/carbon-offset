@@ -26,7 +26,7 @@ export class OrdersResolver {
   @Mutation(() => Order)
   async createOrder(
     @CurrentUser() user: User,
-    @Args('orderInput') orderInput: CreateOrderInput & { fkUserId: number },
+    @Args('orderInput') orderInput: CreateOrderInput,
   ): Promise<Order | BadRequestException> {
     return this.orderService.createOrder({
       ...orderInput,
